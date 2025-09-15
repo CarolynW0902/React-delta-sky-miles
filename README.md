@@ -1,4 +1,4 @@
-## React-Delta_Sky-Miles
+# ReadMe
 I have created this app to demonstrate my skills in html, css, Javascript and React. I have a passion to work at Delta, so creating a this app was an obvious choice for me.
 
 # Getting Started with Create React App
