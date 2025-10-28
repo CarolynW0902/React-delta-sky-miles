@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    //Get the user from localStorage
+    const storedUser = localStorage.getItem("user");
+
+    if(!storedUser) {
+      setErrorMsg("No account found. Please sign up first.");
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+
+    if(user.email === email && user.password === password) {
+      setErrorMsg("");
+      alert(`Welcome back, ${user.firstName}! `)
+    } else {
+      setErrorMsg("Invalid email of password.");
+    }
+  };
+
     return (
       <div id="wrapper">
          
@@ -13,17 +39,18 @@ function Login() {
 
       <form id="form">
         <div>
-          <label htmlFor="signupEmail">@</label>
+          <label htmlFor="email">@</label>
           <input
             type="email"
-            id="signupEmail"
-            name="signupEmail"
+            id="email"
             placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
         <div>
-          <label htmlFor="signupPassword">
+          <label htmlFor="password">
             {/* You can replace this SVG with an icon library later */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -43,8 +70,8 @@ function Login() {
           </label>
           <input
             type="password"
-            id="signupPassword"
-            name="signupPassword"
+            id="password"
+            name="password"
             placeholder="Password"
           />
         </div>
@@ -55,7 +82,7 @@ function Login() {
       </form>
 
       <p>
-        New here? <a href="pages/signup.html">Create an Account</a>
+        New here? <a href="/signup.js">Create an Account</a>
       </p>
       </div>
     );

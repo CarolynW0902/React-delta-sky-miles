@@ -1,13 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 
 function Signup() {
-    return (
-        <div id="wrapper">
-      <h1>Signup</h1>
-      <p id="errorMsg"></p>
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [reenterPassword, setReenterPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState([]);
 
-      <form id="form">
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let newErrors = [];
+
+    if (!firstName.trim()) newErrors.push("First Name is required.");
+    if (!lastName.trim()) newErrors.push("Last Name is required.");
+    if (!email.trim()) newErrors.push("Email is required.");
+    if (!password) newErrors.push("Password is required.");
+    if (password !== reenterPassword) newErrors.push("Passwords do not match.");
+
+    if (newErrors.length > 0) {
+      setErrorMsg(newErrors.join(" "));
+    }else {
+       setErrorMsg([]);
+       //Save user data to localStorage for login later
+       const newUser = {firstName, lastName, email, password};
+       localStorage.setItem("user", JSON.stringify(newUser));
+       alert("Signup successful! You can now log in.");
+    }
+  }
+
+
+    return (
+      <div id="wrapper">
+      <h1>Signup</h1>
+
+      {/*Show error msgs */}
+
+      {errorMsg.length > 0 && (
+        <div id="errorMsg">
+          {errorMsg.map((err, i) => (
+            <p key={i}>{err}</p>
+          ))}
+        </div>
+      )}
+
+      <form id="form" onSubmit={handleSubmit}>
 
         <div>
           <label for="firstName"> 
@@ -23,7 +62,7 @@ function Signup() {
               />
             </svg>
           </label>
-          <input type="text" id="firstName" name="firstName" placeholder="First Name"/>
+          <input type="text" id="firstName" name="firstName" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
         </div>
 
         <div>
@@ -40,12 +79,12 @@ function Signup() {
               />
             </svg>
           </label>
-          <input type="text" id="lastName" name="lastName" placeholder="Last Name"/>
+          <input type="text" id="lastName" name="lastName" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
         </div>
         
         <div>
           <label for="email">@</label>
-          <input type="email" id="signupEmail" name="signupEmail" placeholder="Email"/>
+          <input type="email" id="signupEmail" name="signupEmail" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
         </div>
 
         <div>
@@ -62,7 +101,7 @@ function Signup() {
               />
             </svg>
           </label>
-          <input type="password" id="signupPassword" name="signupPassword" placeholder="Password"/>
+          <input type="password" id="password"  placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
         </div>
 
         <div>
@@ -79,13 +118,13 @@ function Signup() {
               />
             </svg>
           </label>
-          <input type="password" id="reenterPassword" name="reenterPassword" placeholder="Re-Enter Password"/>
+          <input type="password" id="reenterPassword" placeholder="Re-Enter Password" value={reenterPassword} onChange={(e) => setReenterPassword(e.target.value)}/>
         </div>
        
         <button type="submit" id="signupBtn">SignUp</button>
       </form>
 
-      <p>Already have an Account? <a href="../login.html">Login</a></p>
+      <p>Already have an Account? <Link to="/login">Login</Link></p>
     </div>
 
     );
